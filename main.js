@@ -1,21 +1,21 @@
-import CONSTANTS from './constants.js';
+import CONSTANTS from "./constants.js";
 
-"use strict";
+("use strict");
 gameCanvas.width = innerWidth;
 gameCanvas.height = innerHeight;
 const canvasContext = gameCanvas.getContext("2d");
 
 // enable mouse
-const ENHANCED = 1;
+const ENHANCED = 0;
 
 // pinball constants
-const TABLE_WIDTH = 800;
-const TABLE_HEIGHT = 800;
+const TABLE_WIDTH = 400;
+const TABLE_HEIGHT = 830;
 const MAX_BALL_HEIGHT = TABLE_HEIGHT + 200;
 const CENTER = TABLE_WIDTH / 2 + 100;
-const BALL_RADIUS = 9;
+const BALL_RADIUS = 20;
 const WALL_RADIUS = 9;
-const DOME_RADIUS = 200;
+const DOME_RADIUS = 257;
 const FLIPPER_RADIUS = 15;
 const FLIPPER_PIECES = 65;
 const FLIPPER_SPACE = 70;
@@ -32,8 +32,6 @@ const PHYSICS_SUBSTEPS = 9;
 // object types
 const OBJECT_TYPE_WALL = 0;
 const OBJECT_TYPE_BUMPER = 1;
-
-
 
 // let index, secondaryIndex, deltaX, deltaY, speed, height, object, frameCount;
 // local variables
@@ -91,14 +89,6 @@ for (speed = 2; speed--; ) {
     45
   );
 
-  // side bummpers
-  makeObject(
-    FLIPPER_CENTER - (speed * 2 - 1) * 210,
-    DOME_RADIUS + 120,
-    OBJECT_TYPE_BUMPER,
-    70
-  );
-
   // side walls
   for (i = 115; i--; )
     makeObject(
@@ -117,7 +107,7 @@ for (speed = 2; speed--; ) {
   for (i = 60; i--; ) {
     // shooter wall
     makeObject(
-      CENTER + DOME_RADIUS - BALL_RADIUS * 2 - WALL_RADIUS,
+      505,
       TABLE_HEIGHT - 7 * i
     );
 
@@ -150,18 +140,14 @@ for (speed = 2; speed--; ) {
       5
     );
 
-    // bumper grid
-    makeObject(
-      CENTER + (i % 3) * 24 * (speed * 2 - 1),
-      BUMPER_CENTER + 258 - (i % 9) * 20,
-      OBJECT_TYPE_BUMPER,
-      5
-    );
   }
 }
 
 // main game loop
 const update = (substep) => {
+
+    
+
   // update physics
   for (substep = PHYSICS_SUBSTEPS; substep--; ) {
     // flippers
@@ -213,6 +199,19 @@ const update = (substep) => {
       o.w = o.v = 0;
       ballCount--;
     }
+
+    // draw background image
+    const bg = new Image();
+    bg.src = "assets/images/pinballbg.png";
+    var bgwidth = 192;
+    var bgheight = 278;    
+    var x = CENTER - (bgwidth * 3) / 2;
+    var y = TABLE_HEIGHT / 2 - (bgheight * 3) / 2;
+    var xOffset = 20; //because the pokemon pinball bg isn't centered
+    canvasContext.drawImage(bg, x + xOffset, y, bgwidth * 3, bgheight * 3);
+    
+    // make everything transparent grey to help position geometry behind images
+    canvasContext.fillStyle = 'rgba(128, 128, 128, 0.5)';
 
     // for each object
     objects.map((p) => {
@@ -274,16 +273,6 @@ const update = (substep) => {
       i ? 9 : score % 8
     );
 
-  // draw ball count
-  for (i = ballCount; i--; )
-    drawCircle(CENTER + DOME_RADIUS + 60, 420 + i * 60, 25);
-
-  if (ENHANCED) {
-    let y = 10;
-    canvasContext.font = "6em impact";
-    canvasContext.fillText("POKEMON", 15, (y += 90), 260);
-    canvasContext.fillText("PINBALL", 15, (y += 90), 260);
-  }
 };
 
 // keyboard input
@@ -328,65 +317,7 @@ else {
   };
   onresize();
 
-  // mouse control
-  onmousedown = (e) => {
-    if (e.button != 1) {
-      if (!o.v) objects["c"] = 1;
-      objects[e.button ? "x" : "z"] = 1;
-    } else {
-      const r = gameCanvas.getBoundingClientRect();
-      const o = objects[BALL_INDEX];
-      o.x = e.x - r.left;
-      o.y = e.y - r.top;
-      o.v = o.w = 0.000001;
-    }
-    return false;
-  };
-  onmouseup = (e) => (objects["c"] = objects[e.button ? "x" : "z"] = 0);
-  oncontextmenu = (e) => false;
 
-  // try to enable touch
-  if (window.ontouchstart !== undefined) {
-    // override mouse events
-    let wasTouching,
-      mouseDown = onmousedown,
-      mouseUp = onmouseup;
-    onmousedown = onmouseup = () => 0;
 
-    // setup touch input
-    ontouchstart = (e) => {
-      // handle all touch events the same way
-      ontouchstart =
-        ontouchmove =
-        ontouchend =
-          (e) => {
-            e.button = 0; // all touches are left click
 
-            // check if touching and pass to mouse events
-            const touching = e.touches.length;
-            if (touching) {
-              // set event pos and pass it along
-              e.x = e.touches[0].clientX;
-              e.y = e.touches[0].clientY;
-
-              const r = gameCanvas.getBoundingClientRect();
-              if (e.x > r.left + (r.right - r.left) / 2) e.button = 2; // if right side
-
-              wasTouching || mouseDown(e);
-            } else if (wasTouching) {
-              mouseUp(e);
-              e.button = 2; // untouch right
-              mouseUp(e);
-            }
-
-            // set was touching
-            wasTouching = touching;
-
-            // must return true so the document will get focus
-            return true;
-          };
-
-      return ontouchstart(e);
-    };
-  }
 }
