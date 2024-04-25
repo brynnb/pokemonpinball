@@ -70,8 +70,9 @@ for (i = FLIPPER_PIECES; i--; ) {
 
 // build symmetric table
 for (speed = 2; speed--; ) {
-  // bottom pin
-  makeObject(FLIPPER_CENTER, FLIPPER_HEIGHT + 56);
+  
+  // bottom pin between flippers
+  makeObject(FLIPPER_CENTER, FLIPPER_HEIGHT + 36);
 
   // score bumpers
   const BUMPER_CENTER = 180;
@@ -110,9 +111,19 @@ for (speed = 2; speed--; ) {
       505,
       TABLE_HEIGHT - 7 * i
     );
+    // console.log(TABLE_HEIGHT - 7 * i)
 
     // top dome
     const DOME_BOTH_RADIUS = DOME_RADIUS + WALL_RADIUS;
+    makeObject(
+      CENTER + (speed * 2 - 1) * DOME_BOTH_RADIUS * Math.cos(i / 38),
+      DOME_BOTH_RADIUS - DOME_BOTH_RADIUS * Math.sin(i / 38)
+    );
+
+    console.log(CENTER + (speed * 2 - 1) * DOME_BOTH_RADIUS * Math.cos(i / 38))
+    console.log(      DOME_BOTH_RADIUS - DOME_BOTH_RADIUS * Math.sin(i / 38)  )
+
+    //test arc
     makeObject(
       CENTER + (speed * 2 - 1) * DOME_BOTH_RADIUS * Math.cos(i / 38),
       DOME_BOTH_RADIUS - DOME_BOTH_RADIUS * Math.sin(i / 38)

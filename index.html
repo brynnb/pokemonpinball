@@ -1,16 +1,121 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Pokemon Pinball in HTML Canvas </title>
+    <title>Pokemon Pinball in HTML Canvas</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Pokemon Pinball" />
+    <script src="scripts/model.js"></script>
+    <script src="scripts/view.js"></script>
+    <script src="scripts/controller.js"></script>
+    <script src="scripts/data.js"></script>
+    <script src="scripts/sprites.js"></script>
+    <script src="scripts/main.js"></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #222;
+        color: #eee;
+        position: relative;
+      }
+
+      main {
+        margin: 10px auto;
+        display: table;
+      }
+
+      .game,
+      .explanation {
+        display: table-cell;
+      }
+
+      .game {
+        vertical-align: middle;
+        text-align: center;
+      }
+
+      .explanation {
+        vertical-align: top;
+        padding: 10px;
+        max-width: 400px;
+      }
+
+      .explanation h3 {
+        margin-top: 10px;
+      }
+
+      .controls {
+        line-height: 1.4em;
+      }
+
+      .controls dt {
+        font-weight: bold;
+        clear: left;
+        float: left;
+      }
+
+      .controls dd {
+        margin: 0;
+        text-align: right;
+        color: #eee;
+      }
+
+      @media (max-width: 1440px) {
+        .explanation {
+          font-size: 1em;
+        }
+      }
+
+      @media (max-width: 768px) {
+        main,
+        .game,
+        .explanation {
+          display: block;
+        }
+
+        .explanation {
+          margin: 0 auto;
+          padding: 10px;
+        }
+      }
+    </style>
   </head>
-  <body
-    style="
-      margin: 0;
-      touch-action: none;
-      user-select: none;
-      -webkit-user-select: none;
-    "
-  >
-    <canvas id="gameCanvas""> </canvas>
-    <script type="module" src="main.js"></script>
+  <body>
+    <div style="display: none">
+      <!-- Images to be loaded -->
+      <img id="tabledata" src="assets/images/pinballbg_datagrey.png" alt="" />
+      <img id="tableimage" src="assets/images/pinballbg512640.png" alt="" />
+      <img id="ballimage" src="images/pokeballsmall.png" alt="" />
+      <img id="bumperdata" src="images/bumper-data.png" alt="" />
+      <img id="bumperimage" src="images/bumper-image.png" alt="" />
+      <img id="rightflipperdata" src="images/right-flipper-data.png" alt="" />
+      <img id="leftflipperdata" src="images/left-flipper-data.png" alt="" />
+      <img id="rightflipperimage" src="images/right-flipper-image.png" alt="" />
+      <img id="leftflipperimage" src="images/left-flipper-image.png" alt="" />
+      <img id="launcherdata" src="images/up-launcher.png" alt="" />
+      <img id="specialdoor" src="images/special-door-data.png" alt="" />
+      <img id="launcherdoor" src="images/launcher-door-data.png" alt="" />
+      <img id="forkleftdoor" src="images/fork-left-door-data.png" alt="" />
+      <img id="fork" src="images/fork-data.png" alt="" />
+      <img id="forkrightdoor" src="images/fork-right-door-data.png" alt="" />
+      <img id="launchswitch" src="images/launch-switch.png" alt="" />
+      <img id="loseswitch" src="images/lose-switch.png" alt="" />
+    </div>
+    <main>
+      <div class="game">
+        <canvas id="table" width="512" height="640"
+          >Your browser does not support the canvas element.</canvas
+        >
+      </div>
+
+    </main>
   </body>
 </html>
